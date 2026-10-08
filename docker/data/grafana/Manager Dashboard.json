@@ -1,0 +1,2073 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "panels": [],
+      "title": "Production Overview",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Entered System"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#7d7d7d",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Rejected at Testing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reached Processing"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reprocessed"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Final OK"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 15,
+        "x": 0,
+        "y": 1
+      },
+      "id": 5,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\nstation2 AS (\r\n    SELECT\r\n        COUNT(*) AS entered_inspection,\r\n        COUNT(*) FILTER (WHERE value = 1) AS rejected_s2\r\n    FROM gman_sinf22.historical_production\r\n    CROSS JOIN max_date\r\n    WHERE sensor_id = 8\r\n      AND date >= last_now - INTERVAL '7 days'\r\n),\r\nstation3 AS (\r\n    SELECT\r\n        COUNT(*) AS reached_processing,\r\n        COUNT(*) FILTER (WHERE value NOT BETWEEN 0.01 AND 0.1) AS reprocessed,\r\n        COUNT(*) FILTER (WHERE value BETWEEN 0.01 AND 0.1) AS final_ok\r\n    FROM gman_sinf22.historical_production\r\n    CROSS JOIN max_date\r\n    WHERE sensor_id = 16\r\n      AND date >= last_now - INTERVAL '7 days'\r\n)\r\nSELECT\r\n    'Last 7 days' AS pipeline,\r\n    COALESCE(s2.entered_inspection, 0) AS \"Entered System\",\r\n    COALESCE(s2.rejected_s2, 0) AS \"Rejected at Testing\",\r\n    COALESCE(s3.reached_processing, 0) AS \"Reached Processing\",\r\n    COALESCE(s3.reprocessed, 0) AS \"Reprocessed\",\r\n    COALESCE(s3.final_ok, 0) AS \"Final OK\"\r\nFROM station2 s2\r\nCROSS JOIN station3 s3;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Production Pipeline - Last 7 days",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "System Quality",
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 50
+              },
+              {
+                "color": "green",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 9,
+        "x": 15,
+        "y": 1
+      },
+      "id": 1,
+      "options": {
+        "barShape": "flat",
+        "barWidthFactor": 0.5,
+        "effects": {
+          "barGlow": false,
+          "centerGlow": false,
+          "gradient": true
+        },
+        "endpointMarker": "point",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "segmentCount": 1,
+        "segmentSpacing": 0.3,
+        "shape": "gauge",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "sparkline": true,
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfn56t99258g0d"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\nmonthly_metrics AS (\r\n    SELECT\r\n        COUNT(*) FILTER (WHERE sensor_id = 8) AS total_s2,\r\n        COUNT(*) FILTER (WHERE sensor_id = 8 AND value = 0) AS ok_s2,\r\n        \r\n        COUNT(*) FILTER (WHERE sensor_id = 17) AS total_s3,\r\n        COUNT(*) FILTER (WHERE sensor_id = 17 AND value = 0) AS ok_s3,\r\n        \r\n        COUNT(*) FILTER (WHERE sensor_id = 16) AS total_dim,\r\n        COUNT(*) FILTER (WHERE sensor_id = 16 AND value BETWEEN 0.01 AND 0.1) AS ok_dim\r\n    FROM gman_sinf22.historical_production\r\n    CROSS JOIN max_date\r\n    WHERE sensor_id IN (8, 17, 16)\r\n      AND date >= last_now - INTERVAL '1 month'\r\n)\r\nSELECT\r\n    ROUND(100.0 * (ok_s2 + ok_s3 + ok_dim) / NULLIF(total_s2 + total_s3 + total_dim, 0), 2) AS \"System Quality Yield (%)\"\r\nFROM monthly_metrics;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Monthly System Quality Yield",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n)\r\nSELECT\r\n    COUNT(*) FILTER (WHERE value BETWEEN 0.01 AND 0.1) AS \"OK Parts Today\",\r\n    COUNT(*) FILTER (WHERE value NOT BETWEEN 0.01 AND 0.1) AS \"Reprocessed Today\",\r\n    COUNT(*) AS \"Total Processed Today\"\r\nFROM gman_sinf22.historical_production\r\nCROSS JOIN max_date\r\nWHERE sensor_id = 16\r\n  AND date >= DATE_TRUNC('day', last_now);",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Cumulative production today",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 4,
+      "panels": [],
+      "title": "Energy Consumption",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 6,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n)\r\nSELECT\r\n    st.type AS \"Station\",\r\n    ROUND(AVG(hp.value)::numeric, 3) AS \"Avg Power (kW)\",\r\n    ROUND(MAX(hp.value)::numeric, 3) AS \"Peak Power (kW)\",\r\n    ROUND(\r\n        (AVG(hp.value) * EXTRACT(EPOCH FROM (MAX(hp.date) - MIN(hp.date))) / 3600.0)::numeric,\r\n    3) AS \"Estimated Energy (kWh)\"\r\nFROM gman_sinf22.historical_production hp\r\nJOIN gman_sinf22.sensor se ON se.sensor_id = hp.sensor_id\r\nJOIN gman_sinf22.station st ON st.station_id = se.station_id\r\nCROSS JOIN max_date md\r\nWHERE se.type = 'Electrical'\r\n  AND hp.date >= md.last_now - INTERVAL ' 24 hours'\r\nGROUP BY st.station_id, st.type\r\nORDER BY \"Estimated Energy (kWh)\" ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Station Energy & Power Summary",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kWh per OK Part"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 0,
+        "y": 25
+      },
+      "id": 7,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Day",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\ntimeline AS (\r\n    SELECT generate_series(\r\n        (SELECT last_now::date FROM max_date) - INTERVAL '6 days',\r\n        (SELECT last_now::date FROM max_date),\r\n        INTERVAL '1 day'\r\n    )::date AS day\r\n),\r\nenergy AS (\r\n    SELECT\r\n        DATE_TRUNC('day', hp.date)::date AS day,\r\n        (AVG(hp.value) * EXTRACT(EPOCH FROM (MAX(hp.date) - MIN(hp.date))) / 3600.0) AS total_kwh\r\n    FROM gman_sinf22.historical_production hp\r\n    CROSS JOIN max_date md\r\n    WHERE hp.sensor_id = 34\r\n      AND hp.date >= md.last_now - INTERVAL '7 days'\r\n    GROUP BY DATE_TRUNC('day', hp.date)::date\r\n),\r\nproduction AS (\r\n    SELECT\r\n        DATE_TRUNC('day', date)::date AS day,\r\n        COUNT(*) FILTER (WHERE value BETWEEN 0.01 AND 0.1) AS ok_parts\r\n    FROM gman_sinf22.historical_production\r\n    CROSS JOIN max_date\r\n    WHERE sensor_id = 16\r\n      AND date >= last_now - INTERVAL '7 days'\r\n    GROUP BY DATE_TRUNC('day', date)::date\r\n)\r\nSELECT\r\n    TO_CHAR(t.day, 'DD/MM') AS \"Day\",\r\n    COALESCE(\r\n        ROUND(\r\n            (e.total_kwh / NULLIF(p.ok_parts, 0))::numeric,\r\n        4), \r\n    0) AS \"kWh per OK Part\"\r\nFROM timeline t\r\nLEFT JOIN energy e ON t.day = e.day\r\nLEFT JOIN production p ON t.day = p.day\r\nORDER BY t.day ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Energy Efficiency - kWh per finished product",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 14,
+        "x": 10,
+        "y": 25
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\nmetrics AS (\r\n    SELECT\r\n        AVG(hp.value) AS avg_kw,\r\n        EXTRACT(EPOCH FROM (MAX(hp.date) - MIN(hp.date))) / 3600.0 AS total_hours\r\n    FROM gman_sinf22.historical_production hp\r\n    CROSS JOIN max_date md\r\n    WHERE hp.sensor_id = 34\r\n      AND hp.date >= DATE_TRUNC('day', md.last_now) - INTERVAL '7 days'\r\n)\r\nSELECT\r\n    ROUND((avg_kw * total_hours)::numeric, 2) AS \"Energy This Week (kWh)\",\r\n    ROUND((avg_kw * total_hours * 0.1380)::numeric, 2) AS \"Cost This Week (€)\"\r\nFROM metrics;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Energy Cost Today",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Downtime & Avaiability",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisPlacement": "auto",
+            "fillOpacity": 70,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineWidth": 0,
+            "spanNulls": false
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "Inactive"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Active"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 14,
+        "x": 0,
+        "y": 34
+      },
+      "id": 11,
+      "options": {
+        "alignValue": "left",
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "mergeValues": false,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\ntimeline AS (\r\n    SELECT generate_series(\r\n        DATE_TRUNC('hour', (SELECT last_now FROM max_date)) - INTERVAL '8 hours',\r\n        DATE_TRUNC('minute', (SELECT last_now FROM max_date)),\r\n        INTERVAL '5 minutes'\r\n    ) AS slot\r\n),\r\nactive_slots AS (\r\n    SELECT\r\n        st.type AS station_name,\r\n        TO_TIMESTAMP(FLOOR(EXTRACT(EPOCH FROM hp.date) / 300) * 300) AS slot\r\n    FROM gman_sinf22.historical_production hp\r\n    JOIN gman_sinf22.sensor se ON se.sensor_id = hp.sensor_id\r\n    JOIN gman_sinf22.station st ON st.station_id = se.station_id\r\n    CROSS JOIN max_date md\r\n    WHERE hp.date >= md.last_now - INTERVAL '8 hours'\r\n    GROUP BY st.type, FLOOR(EXTRACT(EPOCH FROM hp.date) / 300)\r\n)\r\nSELECT\r\n    t.slot AS time,\r\n    MAX(CASE WHEN s.type = 'Distributing' AND a.slot IS NOT NULL THEN 1 ELSE 0 END)::integer AS \"Distributing\",\r\n    MAX(CASE WHEN s.type = 'Testing' AND a.slot IS NOT NULL THEN 1 ELSE 0 END)::integer AS \"Testing\",\r\n    MAX(CASE WHEN s.type = 'Processing & Validation' AND a.slot IS NOT NULL THEN 1 ELSE 0 END)::integer AS \"Processing & Validation\",\r\n    MAX(CASE WHEN s.type = 'Transporting' AND a.slot IS NOT NULL THEN 1 ELSE 0 END)::integer AS \"Transporting\",\r\n    MAX(CASE WHEN s.type = 'Sorting' AND a.slot IS NOT NULL THEN 1 ELSE 0 END)::integer AS \"Sorting\",\r\n    MAX(CASE WHEN s.type = 'System-Wide' AND a.slot IS NOT NULL THEN 1 ELSE 0 END)::integer AS \"System-Wide\"\r\nFROM timeline t\r\nCROSS JOIN gman_sinf22.station s\r\nLEFT JOIN active_slots a ON t.slot = a.slot AND s.type = a.station_name\r\nGROUP BY t.slot\r\nORDER BY time ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Station Activity",
+      "type": "state-timeline"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "description": "Station availability (%) over an 8-hour shift. \nDowntime is triggered by any data gap longer than 2 minutes. \nFormula: 100 * (1 - Downtime Minutes / 480).\n\nNote: This measures connection uptime and data-logging stability. A station waiting idly for materials but actively reporting data counts as available. A station running perfectly during a network drop counts as downtime.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 90
+              },
+              {
+                "color": "green",
+                "value": 98
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Availability (%)"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 50
+                    },
+                    {
+                      "color": "green",
+                      "value": 75
+                    },
+                    {
+                      "color": "dark-green",
+                      "value": 85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 14,
+        "y": 34
+      },
+      "id": 10,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\nreadings AS (\r\n    SELECT\r\n        se.station_id,\r\n        st.type AS station_type,\r\n        hp.date,\r\n        LAG(hp.date) OVER (\r\n            PARTITION BY se.station_id ORDER BY hp.date\r\n        ) AS prev_date\r\n    FROM gman_sinf22.historical_production hp\r\n    JOIN gman_sinf22.sensor se ON se.sensor_id = hp.sensor_id\r\n    JOIN gman_sinf22.station st ON st.station_id = se.station_id\r\n    CROSS JOIN max_date md\r\n    WHERE hp.date >= md.last_now - INTERVAL '8 hours'\r\n),\r\ndowntime AS (\r\n    SELECT\r\n        station_id,\r\n        station_type,\r\n        SUM(EXTRACT(EPOCH FROM (date - prev_date)) / 60.0) FILTER (\r\n            WHERE EXTRACT(EPOCH FROM (date - prev_date)) > 120\r\n        ) AS downtime_min\r\n    FROM readings\r\n    GROUP BY station_id, station_type\r\n)\r\nSELECT\r\n    station_type AS \"Station\",\r\n    ROUND(\r\n        100.0 * (1 - COALESCE(downtime_min, 0) / 480.0),\r\n    2) AS \"Availability (%)\"\r\nFROM downtime\r\nORDER BY \"Availability (%)\" ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Avaiability rate per station",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total Downtime (min)"
+            },
+            "properties": [
+              {
+                "id": "color"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 5
+                    },
+                    {
+                      "color": "red",
+                      "value": 30
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Station"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 194
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
+      "id": 9,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\nreadings AS (\r\n    SELECT\r\n        se.station_id,\r\n        st.type AS station_type,\r\n        hp.date,\r\n        LAG(hp.date) OVER (\r\n            PARTITION BY se.station_id ORDER BY hp.date\r\n        ) AS prev_date\r\n    FROM gman_sinf22.historical_production hp\r\n    JOIN gman_sinf22.sensor se ON se.sensor_id = hp.sensor_id\r\n    JOIN gman_sinf22.station st ON st.station_id = se.station_id\r\n    CROSS JOIN max_date md\r\n    WHERE hp.date >= md.last_now - INTERVAL '24 hours'\r\n),\r\ngaps AS (\r\n    SELECT\r\n        station_id,\r\n        station_type,\r\n        prev_date AS \"Gap Start\",\r\n        date AS \"Gap End\",\r\n        EXTRACT(EPOCH FROM (date - prev_date)) / 60.0 AS gap_minutes\r\n    FROM readings\r\n    WHERE EXTRACT(EPOCH FROM (date - prev_date)) > 120\r\n)\r\nSELECT\r\n    station_id AS \"Station ID\",\r\n    station_type AS \"Station\",\r\n    COUNT(*) AS \"Downtime Events\",\r\n    ROUND(SUM(gap_minutes)::numeric, 1) AS \"Total Downtime (min)\",\r\n    ROUND(MAX(gap_minutes)::numeric, 1) AS \"Longest Event (min)\",\r\n    TO_CHAR(MAX(\"Gap Start\"), 'HH24:MI') AS \"Last Event Start\",\r\n    TO_CHAR(MAX(\"Gap End\"), 'HH24:MI') AS \"Last Event End\"\r\nFROM gaps\r\nGROUP BY station_id, station_type\r\nORDER BY \"Total Downtime (min)\" DESC NULLS LAST;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Downtime events by station",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 51
+      },
+      "id": 12,
+      "panels": [],
+      "title": "Predictive Maintenance",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "description": "Risk Score (0-100) evaluates asset health by tracking deviations from normal historical baselines across temperature, vibration, and station availability metrics.\n\nRISK LEVELS:\n\n0 to 35 (Green): Low Risk. Normal operational behavior.\n\n36 to 70 (Yellow): Medium Risk. Moderate baseline deviation; schedule maintenance.\n\n71 to 100 (Red): High Risk. Critical anomaly or severe asset stress; immediate action required.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 40
+              },
+              {
+                "color": "red",
+                "value": 75
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "risk_score"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "applyToRow": false,
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "color"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avg_vibration"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Vibration (m/s²)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "peak_temp"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Peak Temp (K)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "anomaly_rate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Anomaly Rate (%)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "station_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Station"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "risk_score"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Risk Score (%)"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 15,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\nvibration AS (\r\n    SELECT\r\n        se.station_id,\r\n        AVG(hp.value) AS avg_vib,\r\n        MAX(hp.value) AS max_vib\r\n    FROM gman_sinf22.historical_production hp\r\n    JOIN gman_sinf22.sensor se ON se.sensor_id = hp.sensor_id\r\n    CROSS JOIN max_date md\r\n    WHERE se.type = 'Vibration'\r\n      AND hp.date >= md.last_now - INTERVAL '8 hours'\r\n    GROUP BY se.station_id\r\n),\r\ntemperature AS (\r\n    SELECT\r\n        se.station_id,\r\n        AVG(hp.value) AS avg_temp,\r\n        MAX(hp.value) AS max_temp\r\n    FROM gman_sinf22.historical_production hp\r\n    JOIN gman_sinf22.sensor se ON se.sensor_id = hp.sensor_id\r\n    CROSS JOIN max_date md\r\n    WHERE se.type = 'Temperature'\r\n      AND hp.date >= md.last_now - INTERVAL '8 hours'\r\n    GROUP BY se.station_id\r\n),\r\nanomalies AS (\r\n    SELECT\r\n        se.station_id,\r\n        COUNT(*) FILTER (\r\n            WHERE ABS(hp.value - avg_val) > (3 * std_val)\r\n        ) AS anomaly_count,\r\n        COUNT(*) AS total_readings\r\n    FROM (\r\n        SELECT\r\n            hp.sensor_id,\r\n            hp.value,\r\n            AVG(hp.value) OVER (PARTITION BY hp.sensor_id) AS avg_val,\r\n            STDDEV(hp.value) OVER (PARTITION BY hp.sensor_id) AS std_val\r\n        FROM gman_sinf22.historical_production hp\r\n        CROSS JOIN max_date md\r\n        WHERE hp.date >= md.last_now - INTERVAL '8 hours'\r\n    ) hp\r\n    JOIN gman_sinf22.sensor se ON se.sensor_id = hp.sensor_id\r\n    GROUP BY se.station_id\r\n)\r\nSELECT\r\n    st.type AS station_name,\r\n    COALESCE(ROUND(v.avg_vib::numeric, 3), 0) AS avg_vibration,\r\n    COALESCE(ROUND(t.max_temp::numeric, 1), 0) AS peak_temp,\r\n    COALESCE(ROUND(100.0 * a.anomaly_count / NULLIF(a.total_readings, 0), 2), 0) AS anomaly_rate,\r\n    COALESCE(ROUND((\r\n        LEAST(v.avg_vib / 5.0, 1.0) * 40 +\r\n        LEAST(GREATEST(t.max_temp - 303.0, 0) / 50.0, 1.0) * 40 +\r\n        LEAST(100.0 * a.anomaly_count / NULLIF(a.total_readings, 0) / 20.0, 1.0) * 20\r\n    )::numeric, 1), 0) AS risk_score\r\nFROM gman_sinf22.station st\r\nLEFT JOIN vibration v ON v.station_id = st.station_id\r\nLEFT JOIN temperature t ON t.station_id = st.station_id\r\nLEFT JOIN anomalies a ON a.station_id = st.station_id\r\nORDER BY risk_score DESC NULLS LAST;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Maintenance Risk Score per Station",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "accMS2"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 0,
+        "y": 60
+      },
+      "id": 13,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n)\r\nSELECT\r\n    TO_TIMESTAMP(FLOOR(EXTRACT(EPOCH FROM hp.date) / 1800) * 1800) AS time,\r\n    st.type AS \"metric\",\r\n    ROUND(AVG(hp.value)::numeric, 3) AS \"value\"\r\nFROM gman_sinf22.historical_production hp\r\nJOIN gman_sinf22.sensor se ON se.sensor_id = hp.sensor_id\r\nJOIN gman_sinf22.station st ON st.station_id = se.station_id\r\nCROSS JOIN max_date md\r\nWHERE se.type = 'Vibration'\r\n  AND hp.date >= md.last_now - INTERVAL '24 hours'\r\nGROUP BY FLOOR(EXTRACT(EPOCH FROM hp.date) / 1800), st.station_id, st.type\r\nORDER BY time ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Vibration trends per Station",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "afn7z07lqktfka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 130
+              },
+              {
+                "color": "red",
+                "value": 150
+              }
+            ]
+          },
+          "unit": "forceN"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Peak Force (N)"
+            },
+            "properties": [
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "forceN"
+              },
+              {
+                "id": "custom.axisColorMode",
+                "value": "series"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0ce3f2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg Processing Force (N)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0926e2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 13,
+        "x": 11,
+        "y": 60
+      },
+      "id": 16,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n)\r\nSELECT\r\n    TO_TIMESTAMP(FLOOR(EXTRACT(EPOCH FROM date) / 1800) * 1800) AS time,\r\n    ROUND(AVG(value)::numeric, 2) AS \"Avg Processing Force (N)\",\r\n    ROUND(MAX(value)::numeric, 2) AS \"Peak Force (N)\"\r\nFROM gman_sinf22.historical_production\r\nCROSS JOIN max_date\r\nWHERE sensor_id = 15\r\n  AND date >= last_now - INTERVAL '24 hours'\r\nGROUP BY FLOOR(EXTRACT(EPOCH FROM date) / 1800)\r\nORDER BY time ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Tool Wear Tracking: Station 3 Force",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 68
+      },
+      "id": 17,
+      "panels": [],
+      "title": "Costs and Environment",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfn56t99258g0d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OK Parts"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              },
+              {
+                "id": "custom.barAlignment",
+                "value": 0
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "normal"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reprocess Rate (%)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Reprocess Rate (%)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reprocessed Parts"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              },
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "normal"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 30
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "normal"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 69
+      },
+      "id": 20,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Name",
+          "sortDesc": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n)\r\nSELECT\r\n    TO_TIMESTAMP(FLOOR(EXTRACT(EPOCH FROM date) / 3600) * 3600) AS time,\r\n    COUNT(*) FILTER (WHERE value BETWEEN 0.01 AND 0.1) AS \"OK Parts\",\r\n    COUNT(*) FILTER (WHERE value NOT BETWEEN 0.01 AND 0.1) AS \"Reprocessed Parts\",\r\n    ROUND(\r\n        100.0 * COUNT(*) FILTER (WHERE value NOT BETWEEN 0.01 AND 0.1)\r\n        / NULLIF(COUNT(*), 0),\r\n    2) AS \"Reprocess Rate (%)\"\r\nFROM gman_sinf22.historical_production\r\nCROSS JOIN max_date\r\nWHERE sensor_id = 16\r\n  AND date >= last_now - INTERVAL '24 hours'\r\nGROUP BY FLOOR(EXTRACT(EPOCH FROM date) / 3600)\r\nORDER BY time ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Total Output & Reprocess Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfn56t99258g0d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Wasted Energy on Reprocessing"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kwatth"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Financial Loss from Rework"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyEUR"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 11,
+        "x": 12,
+        "y": 69
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\nreprocess_ratio AS (\r\n    SELECT\r\n        COUNT(*) FILTER (WHERE value NOT BETWEEN 0.01 AND 0.1)::numeric / NULLIF(COUNT(*), 0) AS failure_rate\r\n    FROM gman_sinf22.historical_production\r\n    CROSS JOIN max_date\r\n    WHERE sensor_id = 16\r\n      AND date >= DATE_TRUNC('day', last_now) - INTERVAL '7 days'\r\n),\r\nenergy_metrics AS (\r\n    SELECT\r\n        AVG(hp.value) AS avg_kw,\r\n        EXTRACT(EPOCH FROM (MAX(hp.date) - MIN(hp.date))) / 3600.0 AS total_hours\r\n    FROM gman_sinf22.historical_production hp\r\n    CROSS JOIN max_date md\r\n    WHERE hp.sensor_id = 34\r\n      AND hp.date >= DATE_TRUNC('day', md.last_now) - INTERVAL '7 days'\r\n)\r\nSELECT\r\n    ROUND((em.avg_kw * em.total_hours * rr.failure_rate * 2)::numeric, 2) AS \"Wasted Energy on Reprocessing\",\r\n    ROUND((em.avg_kw * em.total_hours * rr.failure_rate * 2 * 0.1380)::numeric, 2) AS \"Financial Loss from Rework\"\r\nFROM energy_metrics em\r\nCROSS JOIN reprocess_ratio rr;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Reprocessing Waste Summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfn56t99258g0d"
+      },
+      "description": "This correlation represents an operational hypothesis based on physical sensor proximity along the production line, not an explicitly confirmed causal relationship.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "congm3"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "System Quality Yield (%)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Wood Humidity (g/m³)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 77
+      },
+      "id": 18,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22901948660",
+      "targets": [
+        {
+          "dataset": "sinf252622",
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "WITH max_date AS (\r\n    SELECT MAX(date) AS last_now FROM gman_sinf22.historical_production\r\n),\r\nhumidity AS (\r\n    SELECT\r\n        TO_TIMESTAMP(FLOOR(EXTRACT(EPOCH FROM date) / 3600) * 3600) AS hour,\r\n        AVG(value) AS avg_humidity\r\n    FROM gman_sinf22.historical_production\r\n    CROSS JOIN max_date\r\n    WHERE sensor_id = 12\r\n      AND date >= last_now - INTERVAL '24 hours'\r\n    GROUP BY FLOOR(EXTRACT(EPOCH FROM date) / 3600)\r\n),\r\nline_performance AS (\r\n    SELECT\r\n        TO_TIMESTAMP(FLOOR(EXTRACT(EPOCH FROM date) / 3600) * 3600) AS hour,\r\n        COUNT(*) FILTER (WHERE sensor_id = 8) AS total_s2,\r\n        COUNT(*) FILTER (WHERE sensor_id = 8 AND value = 0) AS ok_s2,\r\n        \r\n        COUNT(*) FILTER (WHERE sensor_id = 17) AS total_s3,\r\n        COUNT(*) FILTER (WHERE sensor_id = 17 AND value = 0) AS ok_s3,\r\n        \r\n        COUNT(*) FILTER (WHERE sensor_id = 16) AS total_dim,\r\n        COUNT(*) FILTER (WHERE sensor_id = 16 AND value BETWEEN 0.01 AND 0.1) AS ok_dim\r\n    FROM gman_sinf22.historical_production\r\n    CROSS JOIN max_date\r\n    WHERE sensor_id IN (8, 17, 16)\r\n      AND date >= last_now - INTERVAL '24 hours'\r\n    GROUP BY FLOOR(EXTRACT(EPOCH FROM date) / 3600)\r\n)\r\nSELECT\r\n    h.hour AS time,\r\n    ROUND(h.avg_humidity::numeric, 2) AS \"Wood Humidity (g/m³)\",\r\n    ROUND(100.0 * (COALESCE(lp.ok_s2, 0) + COALESCE(lp.ok_s3, 0) + COALESCE(lp.ok_dim, 0)) / \r\n          NULLIF(COALESCE(lp.total_s2, 0) + COALESCE(lp.total_s3, 0) + COALESCE(lp.total_dim, 0), 0), 2) AS \"System Quality Yield (%)\"\r\nFROM humidity h\r\nLEFT JOIN line_performance lp ON lp.hour = h.hour\r\nORDER BY time ASC;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Humidity Impact on Quality",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Manager Dashboard",
+  "weekStart": "",
+  "version": 2,
+  "uid": "si6dltg",
+  "id": 806261474480128
+}

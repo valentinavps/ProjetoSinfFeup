@@ -1,0 +1,53 @@
+<FBType Name="SENSOR_HISTORICAL_DB_WRITER">
+  <InterfaceList>
+
+    <EventInputs>
+      <Event Name="READ" Type="Event">
+        <With Var="DATA"/>
+        <With Var="BASE_SENSOR_ID"/>
+      </Event>
+    </EventInputs>
+
+    <EventOutputs>
+      <Event Name="READ_O" Type="Event">
+        <With Var="OUT1"/>
+        <With Var="OUT2"/>
+        <With Var="OUT3"/>
+        <With Var="OUT4"/>
+        <With Var="OUT5"/>
+        <With Var="OUT6"/>
+        <With Var="OUT7"/>
+        <With Var="OUT8"/>
+        <With Var="STATE"/>
+        <With Var="RESULT"/>
+      </Event>
+    </EventOutputs>
+
+    <InputVars>
+      <VarDeclaration Name="DATA" Type="STRING"/>
+      <VarDeclaration Name="BASE_SENSOR_ID" Type="STRING"/>
+
+      <VarDeclaration Name="HOST" Type="STRING"/>
+      <VarDeclaration Name="PORT" Type="STRING"/>
+      <VarDeclaration Name="USER" Type="STRING"/>
+      <VarDeclaration Name="PASSWORD" Type="STRING"/>
+      <VarDeclaration Name="DBNAME" Type="STRING"/>
+      <VarDeclaration Name="SCHEMA" Type="STRING"/>
+      <VarDeclaration Name="TABLE" Type="STRING"/>
+    </InputVars>
+
+    <OutputVars>
+      <VarDeclaration Name="OUT1" Type="STRING"/>
+      <VarDeclaration Name="OUT2" Type="STRING"/>
+      <VarDeclaration Name="OUT3" Type="STRING"/>
+      <VarDeclaration Name="OUT4" Type="STRING"/>
+      <VarDeclaration Name="OUT5" Type="STRING"/>
+      <VarDeclaration Name="OUT6" Type="STRING"/>
+      <VarDeclaration Name="OUT7" Type="STRING"/>
+      <VarDeclaration Name="OUT8" Type="STRING"/>
+      <VarDeclaration Name="STATE" Type="STRING"/>
+      <VarDeclaration Name="RESULT" Type="STRING"/>
+    </OutputVars>
+
+  </InterfaceList>
+</FBType>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE System SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<System Comment="" Name="SINF_0">
+  <Identification/>
+  <VersionInfo Author="eliseu" Date="2023-02-20" Version="1.0"/>
+  <Application Comment="" Name="SINF_0App">
+    <SubAppNetwork>
+      <FB Comment="" Name="G_MAN_1" Type="PROD_MAN" x="1405.8823529411764" y="111.76470588235293"/>
+      <FB Comment="" Name="DISTRIBUTING_STATION" Type="MACHINE_SIMULATOR" x="3741.176470588235" y="241.17647058823528">
+        <Parameter Name="PARAMS_DATA" Value="[((50,15),(150,15)),((0,0.05),(3,0.05)),((600000,30000),(800000,30000)),((0.01,0.008),(0.05,0.008)),((2,0.4),(5,0.4)),((293,2.5),(303,2.5))]"/>
+        <Parameter Name="LIM_ANOM" Value="0.3"/>
+        <Parameter Name="PARAMS_MTBF" Value="(18, 2.5)"/>
+        <Parameter Name="PARAMS_MTTS" Value="(2, 1.5)"/>
+        <Parameter Name="PARAMS_MTTR" Value="(5, 1.5)"/>
+        <Parameter Name="DELAY" Value="1.0"/>
+      </FB>
+      <FB Comment="" Name="TESTING_STATION" Type="MACHINE_SIMULATOR" x="3411.7647058823527" y="1882.3529411764705">
+        <Parameter Name="PARAMS_DATA" Value="[((550,20),(700,20)),((0,0),(1,0)),((0.2,0.12),(0.8,0.12)),((0,0.05),(3,0.05)),((300,120),(1000,120)),((40,5),(60,5)),((293,2.5),(303,2.5)),((0,0.3),(2,0.3))]"/>
+        <Parameter Name="LIM_ANOM" Value="0.3"/>
+        <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+        <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+        <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+        <Parameter Name="DELAY" Value="1.0"/>
+      </FB>
+      <FB Comment="" Name="PROCESSING_AND_VALIDATING_STATION" Type="MACHINE_SIMULATOR" x="3758.8235294117644" y="3523.529411764706">
+        <Parameter Name="PARAMS_DATA" Value="[((50,18),(150,18)),((0.01,0.012),(0.1,0.012)),((0,0),(1,0)),((0,0.05),(3,0.05)),((2,0.4),(5,0.4)),((333,6),(353,6)),((0.01,0.007),(0.05,0.007)),((500,100),(1000,100))]"/>
+        <Parameter Name="LIM_ANOM" Value="0.3"/>
+        <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+        <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+        <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+        <Parameter Name="DELAY" Value="1.0"/>
+      </FB>
+      <FB Comment="" Name="TRANSPORTING_STATION" Type="MACHINE_SIMULATOR" x="3758.8235294117644" y="5047.058823529412">
+        <Parameter Name="PARAMS_DATA" Value="[((50,12),(150,12)),((0,0.05),(3,0.05)),((2,0.4),(5,0.4)),((333,5),(333,5)),((600000,25000),(800000,25000)),((0.01,0.006),(0.05,0.006))]"/>
+        <Parameter Name="LIM_ANOM" Value="0.3"/>
+        <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+        <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+        <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+        <Parameter Name="DELAY" Value="1.0"/>
+      </FB>
+      <FB Comment="" Name="SORTING_STATION" Type="MACHINE_SIMULATOR" x="3641.176470588235" y="6582.35294117647">
+        <Parameter Name="PARAMS_DATA" Value="[((550,20),(700,20)),((0,0.05),(3,0.05)),((300,150),(1000,150)),((2,0.35),(5,0.35)),((293,2.5),(303,2.5))]"/>
+        <Parameter Name="LIM_ANOM" Value="0.3"/>
+        <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+        <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+        <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+        <Parameter Name="DELAY" Value="1.0"/>
+      </FB>
+      <FB Comment="" Name="SYSTEM_WIDE_STATION" Type="MACHINE_SIMULATOR" x="3641.176470588235" y="8111.764705882352">
+        <Parameter Name="PARAMS_DATA" Value="[((0,0.6),(10,0.6)),((600000,30000),(800000,30000)),((40,5),(60,5)),((293,2.5),(303,2.5))]"/>
+        <Parameter Name="LIM_ANOM" Value="0.3"/>
+        <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+        <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+        <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+        <Parameter Name="DELAY" Value="1.0"/>
+      </FB>
+      <FB Comment="" Name="G_MAN_2" Type="PROD_MAN" x="1405.8823529411764" y="1758.8235294117646"/>
+      <FB Comment="" Name="G_MAN_3" Type="PROD_MAN" x="1405.8823529411764" y="3405.882352941176"/>
+      <FB Comment="" Name="G_MAN_4" Type="PROD_MAN" x="1523.5294117647059" y="4935.294117647059"/>
+      <FB Comment="" Name="G_MAN_5" Type="PROD_MAN" x="1641.1764705882351" y="6464.7058823529405"/>
+      <FB Comment="" Name="G_MAN_6" Type="PROD_MAN" x="1523.5294117647059" y="7876.470588235294"/>
+      <FB Comment="" Name="G_MAN" Type="PROD_MAN" x="111.76470588235293" y="1523.5294117647059"/>
+      <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_" Type="SENSOR_HISTORICAL_DB_WRITER" x="6352.941176470587" y="352.94117647058823">
+        <Parameter Name="BASE_SENSOR_ID" Value="1"/>
+        <Parameter Name="HOST" Value="db.fe.up.pt"/>
+        <Parameter Name="PORT" Value="5432"/>
+        <Parameter Name="USER" Value="sinf252622"/>
+        <Parameter Name="PASSWORD" Value="sinf22"/>
+        <Parameter Name="DBNAME" Value="sinf252622"/>
+        <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+        <Parameter Name="TABLE" Value="historical_production"/>
+      </FB>
+      <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_2" Type="SENSOR_HISTORICAL_DB_WRITER" x="6823.529411764705" y="1882.3529411764705">
+        <Parameter Name="BASE_SENSOR_ID" Value="7"/>
+        <Parameter Name="HOST" Value="db.fe.up.pt"/>
+        <Parameter Name="PORT" Value="5432"/>
+        <Parameter Name="USER" Value="sinf252622"/>
+        <Parameter Name="PASSWORD" Value="sinf22"/>
+        <Parameter Name="DBNAME" Value="sinf252622"/>
+        <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+        <Parameter Name="TABLE" Value="historical_production"/>
+      </FB>
+      <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_3" Type="SENSOR_HISTORICAL_DB_WRITER" x="6470.588235294117" y="3411.7647058823527">
+        <Parameter Name="BASE_SENSOR_ID" Value="15"/>
+        <Parameter Name="HOST" Value="db.fe.up.pt"/>
+        <Parameter Name="PORT" Value="5432"/>
+        <Parameter Name="USER" Value="sinf252622"/>
+        <Parameter Name="PASSWORD" Value="sinf22"/>
+        <Parameter Name="DBNAME" Value="sinf252622"/>
+        <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+        <Parameter Name="TABLE" Value="historical_production"/>
+      </FB>
+      <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_4" Type="SENSOR_HISTORICAL_DB_WRITER" x="6352.941176470587" y="5052.941176470588">
+        <Parameter Name="BASE_SENSOR_ID" Value="23"/>
+        <Parameter Name="HOST" Value="db.fe.up.pt"/>
+        <Parameter Name="PORT" Value="5432"/>
+        <Parameter Name="USER" Value="sinf252622"/>
+        <Parameter Name="PASSWORD" Value="sinf22"/>
+        <Parameter Name="DBNAME" Value="sinf252622"/>
+        <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+        <Parameter Name="TABLE" Value="historical_production"/>
+      </FB>
+      <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_5" Type="SENSOR_HISTORICAL_DB_WRITER" x="6352.941176470587" y="6588.235294117647">
+        <Parameter Name="BASE_SENSOR_ID" Value="29"/>
+        <Parameter Name="HOST" Value="db.fe.up.pt"/>
+        <Parameter Name="PORT" Value="5432"/>
+        <Parameter Name="USER" Value="sinf252622"/>
+        <Parameter Name="PASSWORD" Value="sinf22"/>
+        <Parameter Name="DBNAME" Value="sinf252622"/>
+        <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+        <Parameter Name="TABLE" Value="historical_production"/>
+      </FB>
+      <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_6" Type="SENSOR_HISTORICAL_DB_WRITER" x="6352.941176470587" y="8117.647058823529">
+        <Parameter Name="BASE_SENSOR_ID" Value="34"/>
+        <Parameter Name="HOST" Value="db.fe.up.pt"/>
+        <Parameter Name="PORT" Value="5432"/>
+        <Parameter Name="USER" Value="sinf252622"/>
+        <Parameter Name="PASSWORD" Value="sinf22"/>
+        <Parameter Name="DBNAME" Value="sinf252622"/>
+        <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+        <Parameter Name="TABLE" Value="historical_production"/>
+      </FB>
+      <EventConnections>
+        <Connection Comment="" Destination="DISTRIBUTING_STATION.ON-OFF" Source="G_MAN_1.ON-OFF_O" dx1="1305.8823529411764"/>
+        <Connection Comment="" Destination="TESTING_STATION.ON-OFF" Source="G_MAN_2.ON-OFF_O" dx1="776.470588235294"/>
+        <Connection Comment="" Destination="PROCESSING_AND_VALIDATING_STATION.ON-OFF" Source="G_MAN_3.ON-OFF_O" dx1="782.3529411764705"/>
+        <Connection Comment="" Destination="TRANSPORTING_STATION.ON-OFF" Source="G_MAN_4.ON-OFF_O" dx1="723.5294117647059"/>
+        <Connection Comment="" Destination="SORTING_STATION.ON-OFF" Source="G_MAN_5.ON-OFF_O" dx1="605.8823529411765"/>
+        <Connection Comment="" Destination="SYSTEM_WIDE_STATION.ON-OFF" Source="G_MAN_6.ON-OFF_O" dx1="664.7058823529411"/>
+        <Connection Comment="" Destination="G_MAN_1.ON-OFF" Source="G_MAN.ON-OFF_O" dx1="252.9411764705882"/>
+        <Connection Comment="" Destination="G_MAN_2.ON-OFF" Source="G_MAN.ON-OFF_O" dx1="252.9411764705882"/>
+        <Connection Comment="" Destination="G_MAN_3.ON-OFF" Source="G_MAN.ON-OFF_O" dx1="252.9411764705882"/>
+        <Connection Comment="" Destination="G_MAN_4.ON-OFF" Source="G_MAN.ON-OFF_O" dx1="311.7647058823529"/>
+        <Connection Comment="" Destination="G_MAN_5.ON-OFF" Source="G_MAN.ON-OFF_O" dx1="370.5882352941176"/>
+        <Connection Comment="" Destination="G_MAN_6.ON-OFF" Source="G_MAN.ON-OFF_O" dx1="311.7647058823529"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_.READ" Source="DISTRIBUTING_STATION.READ_O" dx1="364.70588235294116"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_2.READ" Source="TESTING_STATION.READ_O" dx1="835.2941176470588"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_5.READ" Source="SORTING_STATION.READ_O" dx1="535.2941176470588"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_4.READ" Source="TRANSPORTING_STATION.READ_O" dx1="594.1176470588235"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_3.READ" Source="PROCESSING_AND_VALIDATING_STATION.READ_O" dx1="464.70588235294116"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_6.READ" Source="SYSTEM_WIDE_STATION.READ_O" dx1="594.1176470588235"/>
+      </EventConnections>
+      <DataConnections>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_.DATA" Source="DISTRIBUTING_STATION.DATA" dx1="364.70588235294116"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_2.DATA" Source="TESTING_STATION.DATA" dx1="835.2941176470588"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_5.DATA" Source="SORTING_STATION.DATA" dx1="535.2941176470588"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_3.DATA" Source="PROCESSING_AND_VALIDATING_STATION.DATA" dx1="464.70588235294116"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_6.DATA" Source="SYSTEM_WIDE_STATION.DATA" dx1="594.1176470588235"/>
+        <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_4.DATA" Source="TRANSPORTING_STATION.DATA" dx1="829.4117647058823"/>
+      </DataConnections>
+    </SubAppNetwork>
+  </Application>
+  <Device Comment="" Name="FORTE_PC" Type="FORTE_PC" x="5241.176470588235" y="1999.9999999999998">
+    <Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;"/>
+    <Attribute Comment="device profile" Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+    <Attribute Comment="color" Name="Color" Type="STRING" Value="102,239,165"/>
+    <Resource Comment="" Name="DIN1" Type="EMB_RES" x="0.0" y="0.0">
+      <FBNetwork>
+        <FB Comment="" Name="G_MAN_1" Type="PROD_MAN" x="999.9999999999999" y="999.9999999999999"/>
+        <FB Comment="" Name="DISTRIBUTING_STATION" Type="MACHINE_SIMULATOR" x="3741.176470588235" y="241.17647058823528">
+          <Parameter Name="PARAMS_DATA" Value="[((50,15),(150,15)),((0,0.05),(3,0.05)),((600000,30000),(800000,30000)),((0.01,0.008),(0.05,0.008)),((2,0.4),(5,0.4)),((293,2.5),(303,2.5))]"/>
+          <Parameter Name="LIM_ANOM" Value="0.3"/>
+          <Parameter Name="PARAMS_MTBF" Value="(18, 2.5)"/>
+          <Parameter Name="PARAMS_MTTS" Value="(2, 1.5)"/>
+          <Parameter Name="PARAMS_MTTR" Value="(5, 1.5)"/>
+          <Parameter Name="DELAY" Value="1.0"/>
+        </FB>
+        <FB Comment="" Name="TESTING_STATION" Type="MACHINE_SIMULATOR" x="3741.176470588235" y="1864.705882352941">
+          <Parameter Name="PARAMS_DATA" Value="[((550,20),(700,20)),((0,0),(1,0)),((0.2,0.12),(0.8,0.12)),((0,0.05),(3,0.05)),((300,120),(1000,120)),((40,5),(60,5)),((293,2.5),(303,2.5)),((0,0.3),(2,0.3))]"/>
+          <Parameter Name="LIM_ANOM" Value="0.3"/>
+          <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+          <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+          <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+          <Parameter Name="DELAY" Value="1.0"/>
+        </FB>
+        <FB Comment="" Name="PROCESSING_AND_VALIDATING_STATION" Type="MACHINE_SIMULATOR" x="3758.8235294117644" y="3523.529411764706">
+          <Parameter Name="PARAMS_DATA" Value="[((50,18),(150,18)),((0.01,0.012),(0.1,0.012)),((0,0),(1,0)),((0,0.05),(3,0.05)),((2,0.4),(5,0.4)),((333,6),(353,6)),((0.01,0.007),(0.05,0.007)),((500,100),(1000,100))]"/>
+          <Parameter Name="LIM_ANOM" Value="0.3"/>
+          <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+          <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+          <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+          <Parameter Name="DELAY" Value="1.0"/>
+        </FB>
+        <FB Comment="" Name="TRANSPORTING_STATION" Type="MACHINE_SIMULATOR" x="3758.8235294117644" y="5047.058823529412">
+          <Parameter Name="PARAMS_DATA" Value="[((50,12),(150,12)),((0,0.05),(3,0.05)),((2,0.4),(5,0.4)),((333,5),(333,5)),((600000,25000),(800000,25000)),((0.01,0.006),(0.05,0.006))]"/>
+          <Parameter Name="LIM_ANOM" Value="0.3"/>
+          <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+          <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+          <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+          <Parameter Name="DELAY" Value="1.0"/>
+        </FB>
+        <FB Comment="" Name="SORTING_STATION" Type="MACHINE_SIMULATOR" x="3641.176470588235" y="6582.35294117647">
+          <Parameter Name="PARAMS_DATA" Value="[((550,20),(700,20)),((0,0.05),(3,0.05)),((300,150),(1000,150)),((2,0.35),(5,0.35)),((293,2.5),(303,2.5))]"/>
+          <Parameter Name="LIM_ANOM" Value="0.3"/>
+          <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+          <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+          <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+          <Parameter Name="DELAY" Value="1.0"/>
+        </FB>
+        <FB Comment="" Name="SYSTEM_WIDE_STATION" Type="MACHINE_SIMULATOR" x="3641.176470588235" y="8111.764705882352">
+          <Parameter Name="PARAMS_DATA" Value="[((0,0.6),(10,0.6)),((600000,30000),(800000,30000)),((40,5),(60,5)),((293,2.5),(303,2.5))]"/>
+          <Parameter Name="LIM_ANOM" Value="0.3"/>
+          <Parameter Name="PARAMS_MTBF" Value="(25, 2.5)"/>
+          <Parameter Name="PARAMS_MTTS" Value="(5, 1.5)"/>
+          <Parameter Name="PARAMS_MTTR" Value="(9, 1.5)"/>
+          <Parameter Name="DELAY" Value="1.0"/>
+        </FB>
+        <FB Comment="" Name="G_MAN_2" Type="PROD_MAN" x="1405.8823529411764" y="1758.8235294117646"/>
+        <FB Comment="" Name="G_MAN_3" Type="PROD_MAN" x="1405.8823529411764" y="3405.882352941176"/>
+        <FB Comment="" Name="G_MAN_4" Type="PROD_MAN" x="1523.5294117647059" y="4935.294117647059"/>
+        <FB Comment="" Name="G_MAN_5" Type="PROD_MAN" x="1641.1764705882351" y="6464.7058823529405"/>
+        <FB Comment="" Name="G_MAN_6" Type="PROD_MAN" x="1523.5294117647059" y="7876.470588235294"/>
+        <FB Comment="" Name="G_MAN" Type="PROD_MAN" x="111.76470588235293" y="1523.5294117647059"/>
+        <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_" Type="SENSOR_HISTORICAL_DB_WRITER" x="5411.764705882352" y="352.94117647058823">
+          <Parameter Name="BASE_SENSOR_ID" Value="1"/>
+          <Parameter Name="HOST" Value="db.fe.up.pt"/>
+          <Parameter Name="PORT" Value="5432"/>
+          <Parameter Name="USER" Value="sinf252622"/>
+          <Parameter Name="PASSWORD" Value="sinf22"/>
+          <Parameter Name="DBNAME" Value="sinf252622"/>
+          <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+          <Parameter Name="TABLE" Value="historical_production"/>
+        </FB>
+        <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_2" Type="SENSOR_HISTORICAL_DB_WRITER" x="6352.941176470587" y="1764.705882352941">
+          <Parameter Name="BASE_SENSOR_ID" Value="7"/>
+          <Parameter Name="HOST" Value="db.fe.up.pt"/>
+          <Parameter Name="PORT" Value="5432"/>
+          <Parameter Name="USER" Value="sinf252622"/>
+          <Parameter Name="PASSWORD" Value="sinf22"/>
+          <Parameter Name="DBNAME" Value="sinf252622"/>
+          <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+          <Parameter Name="TABLE" Value="historical_production"/>
+        </FB>
+        <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_3" Type="SENSOR_HISTORICAL_DB_WRITER" x="6235.294117647059" y="3411.7647058823527">
+          <Parameter Name="BASE_SENSOR_ID" Value="15"/>
+          <Parameter Name="HOST" Value="db.fe.up.pt"/>
+          <Parameter Name="PORT" Value="5432"/>
+          <Parameter Name="USER" Value="sinf252622"/>
+          <Parameter Name="PASSWORD" Value="sinf22"/>
+          <Parameter Name="DBNAME" Value="sinf252622"/>
+          <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+          <Parameter Name="TABLE" Value="historical_production"/>
+        </FB>
+        <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_4" Type="SENSOR_HISTORICAL_DB_WRITER" x="5882.35294117647" y="5052.941176470588">
+          <Parameter Name="BASE_SENSOR_ID" Value="23"/>
+          <Parameter Name="HOST" Value="db.fe.up.pt"/>
+          <Parameter Name="PORT" Value="5432"/>
+          <Parameter Name="USER" Value="sinf252622"/>
+          <Parameter Name="PASSWORD" Value="sinf22"/>
+          <Parameter Name="DBNAME" Value="sinf252622"/>
+          <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+          <Parameter Name="TABLE" Value="historical_production"/>
+        </FB>
+        <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_5" Type="SENSOR_HISTORICAL_DB_WRITER" x="5647.058823529412" y="6588.235294117647">
+          <Parameter Name="BASE_SENSOR_ID" Value="29"/>
+          <Parameter Name="HOST" Value="db.fe.up.pt"/>
+          <Parameter Name="PORT" Value="5432"/>
+          <Parameter Name="USER" Value="sinf252622"/>
+          <Parameter Name="PASSWORD" Value="sinf22"/>
+          <Parameter Name="DBNAME" Value="sinf252622"/>
+          <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+          <Parameter Name="TABLE" Value="historical_production"/>
+        </FB>
+        <FB Comment="" Name="SENSOR_HISTORICAL_DB_WRITER_6" Type="SENSOR_HISTORICAL_DB_WRITER" x="5764.7058823529405" y="8117.647058823529">
+          <Parameter Name="BASE_SENSOR_ID" Value="34"/>
+          <Parameter Name="HOST" Value="db.fe.up.pt"/>
+          <Parameter Name="PORT" Value="5432"/>
+          <Parameter Name="USER" Value="sinf252622"/>
+          <Parameter Name="PASSWORD" Value="sinf22"/>
+          <Parameter Name="DBNAME" Value="sinf252622"/>
+          <Parameter Name="SCHEMA" Value="gman_sinf22"/>
+          <Parameter Name="TABLE" Value="historical_production"/>
+        </FB>
+        <EventConnections>
+          <Connection Comment="" Destination="DISTRIBUTING_STATION.ON-OFF" Source="G_MAN_1.ON-OFF_O"/>
+          <Connection Comment="" Destination="TESTING_STATION.ON-OFF" Source="G_MAN_2.ON-OFF_O"/>
+          <Connection Comment="" Destination="PROCESSING_AND_VALIDATING_STATION.ON-OFF" Source="G_MAN_3.ON-OFF_O"/>
+          <Connection Comment="" Destination="TRANSPORTING_STATION.ON-OFF" Source="G_MAN_4.ON-OFF_O"/>
+          <Connection Comment="" Destination="SORTING_STATION.ON-OFF" Source="G_MAN_5.ON-OFF_O"/>
+          <Connection Comment="" Destination="SYSTEM_WIDE_STATION.ON-OFF" Source="G_MAN_6.ON-OFF_O"/>
+          <Connection Comment="" Destination="G_MAN_1.ON-OFF" Source="G_MAN.ON-OFF_O"/>
+          <Connection Comment="" Destination="G_MAN_2.ON-OFF" Source="G_MAN.ON-OFF_O"/>
+          <Connection Comment="" Destination="G_MAN_3.ON-OFF" Source="G_MAN.ON-OFF_O"/>
+          <Connection Comment="" Destination="G_MAN_4.ON-OFF" Source="G_MAN.ON-OFF_O"/>
+          <Connection Comment="" Destination="G_MAN_5.ON-OFF" Source="G_MAN.ON-OFF_O"/>
+          <Connection Comment="" Destination="G_MAN_6.ON-OFF" Source="G_MAN.ON-OFF_O"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_.READ" Source="DISTRIBUTING_STATION.READ_O"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_2.READ" Source="TESTING_STATION.READ_O"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_5.READ" Source="SORTING_STATION.READ_O"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_4.READ" Source="TRANSPORTING_STATION.READ_O"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_3.READ" Source="PROCESSING_AND_VALIDATING_STATION.READ_O"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_6.READ" Source="SYSTEM_WIDE_STATION.READ_O"/>
+        </EventConnections>
+        <DataConnections>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_.DATA" Source="DISTRIBUTING_STATION.DATA"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_2.DATA" Source="TESTING_STATION.DATA"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_5.DATA" Source="SORTING_STATION.DATA"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_3.DATA" Source="PROCESSING_AND_VALIDATING_STATION.DATA"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_6.DATA" Source="SYSTEM_WIDE_STATION.DATA"/>
+          <Connection Comment="" Destination="SENSOR_HISTORICAL_DB_WRITER_4.DATA" Source="TRANSPORTING_STATION.DATA"/>
+        </DataConnections>
+      </FBNetwork>
+    </Resource>
+  </Device>
+  <Mapping From="SINF_0App.G_MAN_1" To="FORTE_PC.DIN1.G_MAN_1"/>
+  <Mapping From="SINF_0App.DISTRIBUTING_STATION" To="FORTE_PC.DIN1.DISTRIBUTING_STATION"/>
+  <Mapping From="SINF_0App.TESTING_STATION" To="FORTE_PC.DIN1.TESTING_STATION"/>
+  <Mapping From="SINF_0App.PROCESSING_AND_VALIDATING_STATION" To="FORTE_PC.DIN1.PROCESSING_AND_VALIDATING_STATION"/>
+  <Mapping From="SINF_0App.TRANSPORTING_STATION" To="FORTE_PC.DIN1.TRANSPORTING_STATION"/>
+  <Mapping From="SINF_0App.SORTING_STATION" To="FORTE_PC.DIN1.SORTING_STATION"/>
+  <Mapping From="SINF_0App.SYSTEM_WIDE_STATION" To="FORTE_PC.DIN1.SYSTEM_WIDE_STATION"/>
+  <Mapping From="SINF_0App.G_MAN_2" To="FORTE_PC.DIN1.G_MAN_2"/>
+  <Mapping From="SINF_0App.G_MAN_3" To="FORTE_PC.DIN1.G_MAN_3"/>
+  <Mapping From="SINF_0App.G_MAN_4" To="FORTE_PC.DIN1.G_MAN_4"/>
+  <Mapping From="SINF_0App.G_MAN_5" To="FORTE_PC.DIN1.G_MAN_5"/>
+  <Mapping From="SINF_0App.G_MAN_6" To="FORTE_PC.DIN1.G_MAN_6"/>
+  <Mapping From="SINF_0App.G_MAN" To="FORTE_PC.DIN1.G_MAN"/>
+  <Mapping From="SINF_0App.SENSOR_HISTORICAL_DB_WRITER_" To="FORTE_PC.DIN1.SENSOR_HISTORICAL_DB_WRITER_"/>
+  <Mapping From="SINF_0App.SENSOR_HISTORICAL_DB_WRITER_2" To="FORTE_PC.DIN1.SENSOR_HISTORICAL_DB_WRITER_2"/>
+  <Mapping From="SINF_0App.SENSOR_HISTORICAL_DB_WRITER_3" To="FORTE_PC.DIN1.SENSOR_HISTORICAL_DB_WRITER_3"/>
+  <Mapping From="SINF_0App.SENSOR_HISTORICAL_DB_WRITER_4" To="FORTE_PC.DIN1.SENSOR_HISTORICAL_DB_WRITER_4"/>
+  <Mapping From="SINF_0App.SENSOR_HISTORICAL_DB_WRITER_5" To="FORTE_PC.DIN1.SENSOR_HISTORICAL_DB_WRITER_5"/>
+  <Mapping From="SINF_0App.SENSOR_HISTORICAL_DB_WRITER_6" To="FORTE_PC.DIN1.SENSOR_HISTORICAL_DB_WRITER_6"/>
+  <Segment Comment="" Name="Ethernet" Type="Ethernet" dx1="1864.705882352941" x="4670.588235294117" y="1229.4117647058822">
+    <Attribute Comment="color" Name="Color" Type="STRING" Value="171,91,198"/>
+  </Segment>
+  <Link CommResource="FORTE_PC" Comment="" SegmentName="Ethernet"/>
+</System>
